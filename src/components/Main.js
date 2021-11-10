@@ -6,7 +6,7 @@ import Show from "../pages/Show";
 function Main(props) {
   const [cheese, setCheese] = useState(null);
 
-  const URL = "https://the-big-cheese.herokuapp.com/cheese";
+  const URL = "https://the-big-cheese.herokuapp.com/cheese/";
 
   const getCheese = async () => {
     const response = await fetch(URL);
@@ -25,6 +25,24 @@ function Main(props) {
     getCheese();
   };
 
+  const updateCheese = async (cheesey, id) => {
+    await fetch(URL + id, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cheesey),
+    })
+    getCheese()
+  }
+
+  const deleteCheese = async id => {
+    await fetch(URL + id, {
+      method: "delete",
+    })
+    getCheese()
+  }
+
   useEffect(() => getCheese(), []);
 
   return (
@@ -38,6 +56,9 @@ function Main(props) {
           render={(rp) => (
             <Show
               {...rp}
+              cheese={cheese}
+              updateCheese={updateCheese}
+              deleteCheese={deleteCheese}
             />
           )}
         />
